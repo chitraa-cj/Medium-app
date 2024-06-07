@@ -13,7 +13,6 @@ const app = new Hono<{
 app.use('api/v1/blog/*', async (c, next) => {
   const header = c.req.header("authorization")
   const token = header?.split(" ")[1]
-  
   //@ts-ignore
   const response = await verify(token, c.env.JWT_SECRET)
   if(response.id){
@@ -31,17 +30,34 @@ app.post('/api/v1/user/signup', async (c) => {
 
   const body = await c.req.json();
 
-  const user = await prisma.user.create({
-    data: {
-      email: body.email,
-      password: body.password,
-    }
-  })
-  const token = await sign({id:user.id},c.env.JWT_SECRET)
-  return c.json({
-    token:token
-  })
-})
+  // Check if the user already exists
+  const existingUser = await prisma.user.findUnique({
+    where: { email: body.email }
+  });
+
+  if (existingUser) {
+    c.status(400);
+    return c.json({ error: "User with this email already exists" });
+  }
+
+  try {
+    const user = await prisma.user.create({
+      data: {
+        email: body.email,
+        password: body.password,
+      }
+    });
+    console.log("data")
+    const jwt =await sign({ id: user.id }, c.env.JWT_SECRET);
+    console.log(jwt)
+    return c.json({ jwt });
+  } catch (error) {
+    // Handle other possible errors
+    c.status(500);
+    return c.json({ error: "Internal Server Error" });
+  }
+});
+
 
 app.post('/api/v1/signin', async (c) => {
 	const prisma = new PrismaClient({
