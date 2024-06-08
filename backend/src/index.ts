@@ -63,11 +63,12 @@ app.post('/api/v1/signin', async (c) => {
 	const prisma = new PrismaClient({
 		datasourceUrl: c.env?.DATABASE_URL	,
 	}).$extends(withAccelerate());
-
+  
 	const body = await c.req.json();
 	const user = await prisma.user.findUnique({
 		where: {
 			email: body.email,
+      password: body.password
 		}
 	});
 
