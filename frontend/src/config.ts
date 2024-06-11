@@ -1,0 +1,1 @@
+export const BACKEND_URL = "https://backend.chitra-cj69.workers.dev"
