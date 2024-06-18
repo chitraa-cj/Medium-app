@@ -1,5 +1,5 @@
-import { Appbar } from "../components/Appbar"
-import { BlogCard } from "../components/BlogCard"
+import { Appbar } from "../components/Appbar";
+import { BlogCard } from "../components/BlogCard";
 import { BlogSkeleton } from "../components/BlogSkeleton";
 import { useBlogs } from "../hooks";
 
@@ -7,33 +7,37 @@ export const Blogs = () => {
     const { loading, blogs } = useBlogs();
 
     if (loading) {
-        return <div>
-            <Appbar /> 
-            <div  className="flex justify-center">
-                <div>
-                    <BlogSkeleton />
-                    <BlogSkeleton />
-                    <BlogSkeleton />
-                    <BlogSkeleton />
-                    <BlogSkeleton />
+        return (
+            <div>
+                <Appbar />
+                <div className="flex justify-center items-center min-h-screen">
+                    <div className="space-y-4">
+                        {[...Array(5)].map((_, index) => (
+                            <BlogSkeleton key={index} />
+                        ))}
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
+    return (
+        <div>
+            <Appbar />
+            <div className="flex justify-center p-4">
+                <div className="space-y-4">
+                    {blogs.map(blog => (
+                        <BlogCard
+                            key={blog.id}
+                            id={blog.id}
+                            authorName={blog.author.name || "Anonymous"}
+                            title={blog.title}
+                            content={blog.content}
+                            publishedDate={"2nd Feb 2024"}
+                        />
+                    ))}
                 </div>
             </div>
         </div>
-    }
-
-    return <div>
-        <Appbar />
-        <div  className="flex justify-center">
-            <div>
-                {blogs.map(blog => <BlogCard
-                    id={blog.id}
-                    authorName={blog.author.name || "Anonymous"}
-                    title={blog.title}
-                    content={blog.content}
-                    publishedDate={"2nd Feb 2024"}
-                />)}
-            </div>
-        </div>
-    </div>
+    );
 }
-
