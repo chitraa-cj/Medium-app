@@ -1,4 +1,3 @@
-import React from 'react';
 
 const Spinner = ({ size = 32, color = 'blue-600', speed = 'animate-spin' }) => {
     const svgStyle = {
