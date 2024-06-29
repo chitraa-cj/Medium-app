@@ -1,20 +1,23 @@
+import React from 'react';
 
 const Spinner = ({ size = 32, color = 'blue-600', speed = 'animate-spin' }) => {
     const svgStyle = {
-        width: size,
-        height: size,
-        color: 'text-gray-200',
-        animation: speed,
-        fill: `var(--tw-${color})`,
+        width: `${size}px`,
+        height: `${size}px`,
     };
 
     return (
-        <div role="status" aria-live="polite" aria-busy="true">
+        <div
+            role="status"
+            aria-live="polite"
+            aria-busy="true"
+            className="flex justify-center items-center"
+        >
             <svg
                 aria-hidden="true"
                 style={svgStyle}
+                className={`${speed} text-gray-200 fill-current text-${color}`}
                 viewBox="0 0 100 101"
-                fill="none"
                 xmlns="http://www.w3.org/2000/svg"
             >
                 <path
